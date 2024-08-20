@@ -10,25 +10,23 @@ using namespace std;
 void get_URL( const string& host, const string& path )
 {
   TCPSocket sock;
-  Address addr { host, "http"}; // hostname and service
-  sock.connect(addr); 
+  Address addr { host, "http" }; // hostname and service
+  sock.connect( addr );
   // follow 2.1: Fetch a Web page
-  sock.write("GET " + path + " HTTP/1.1\r\n");
-  sock.write("Host: " + host + "\r\n");
-  sock.write("Connection: close \r\n\r\n"); // double enter here
+  sock.write( "GET " + path + " HTTP/1.1\r\n" );
+  sock.write( "Host: " + host + "\r\n" );
+  sock.write( "Connection: close \r\n\r\n" ); // double enter here
   // Read into buffer: void read( std::string& buffer );
-  
 
   string buf;
-  sock.read(buf);
-  while(1){
-    if (buf.empty()){
+  sock.read( buf );
+  while ( 1 ) {
+    if ( buf.empty() ) {
       break;
     }
     cout << buf;
-    sock.read(buf);      
+    sock.read( buf );
   }
-
 
   // cerr << "Function called: get_URL(" << host << ", " << path << ")\n";
   // cerr << "Warning: get_URL() has not been implemented yet.\n";

@@ -11,11 +11,11 @@ bool Writer::is_closed() const
 
 void Writer::push( string data )
 {
-  if (error_ || closed_ || data.empty()) {
+  if ( error_ || closed_ || data.empty() ) {
     return;
   }
-  const size_t len = min(available_capacity(), data.size());
-  queue_.append(data.substr(0, len));
+  const size_t len = min( available_capacity(), data.size() );
+  queue_.append( data.substr( 0, len ) );
   pushed_len_ += len;
 }
 
@@ -47,19 +47,17 @@ uint64_t Reader::bytes_popped() const
 
 string_view Reader::peek() const
 {
-  // Your code here.
-  return {queue_}; // 返回临时对象，隐式修改
+  return { queue_ }; // 返回临时对象，隐式修改
 }
 
 void Reader::pop( uint64_t len )
 {
-  // Your code here.
-  if (error_ || queue_.empty() || len == 0) {
+  if ( error_ || queue_.empty() || len == 0 ) {
     return;
   }
 
-  len = min(len, bytes_buffered());
-  queue_.erase(0, len);
+  len = min( len, bytes_buffered() );
+  queue_.erase( 0, len );
   popped_len_ += len;
 }
 
