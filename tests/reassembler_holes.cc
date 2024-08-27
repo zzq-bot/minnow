@@ -38,10 +38,12 @@ int main()
       test.execute( ReadAll( "" ) );
       test.execute( IsFinished { false } );
 
+      std::cout << "Final insert\n";
       test.execute( Insert { "a", 0 } );
 
       test.execute( BytesPushed( 2 ) );
       test.execute( ReadAll( "ab" ) );
+
       test.execute( IsFinished { true } );
     }
 
