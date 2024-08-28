@@ -1,14 +1,13 @@
 #include "reassembler.hh"
 #include <algorithm>
-#include <iostream>
 
 using namespace std;
 
 void Reassembler::insert( uint64_t first_index, string data, bool is_last_substring )
 {
   // we need to deal with overlapping intervals in the inserted strings
-
   uint64_t avail_capacity = output_.writer().available_capacity();
+  uint64_t unassembled_index_ = writer().bytes_pushed();
   uint64_t first_unacceptable_index = unassembled_index_ + avail_capacity;
   uint64_t end_index = first_index + data.size();
   // [) interval
@@ -20,7 +19,7 @@ void Reassembler::insert( uint64_t first_index, string data, bool is_last_substr
   // 1. discard data beyond capacity and skip if it has already in output_.writer()
   if ( first_index >= first_unacceptable_index || end_index <= unassembled_index_ || data.empty()
        || avail_capacity == 0 ) {
-    if ( eof_idx_ == end_index && unassembled_bytes_ == 0 ) {
+    if ( eof_idx_ == unassembled_index_ && unassembled_bytes_ == 0 ) {
       output_.writer().close();
     }
     return;
@@ -89,7 +88,6 @@ void Reassembler::insert( uint64_t first_index, string data, bool is_last_substr
     unassembled_bytes_ += tmp.second.size();
   }
 
-  std::cout << eof_idx_ << " " << end_index << " " << unassembled_bytes_ << std::endl;
   if ( eof_idx_ == unassembled_index_ && unassembled_bytes_ == 0 ) {
     output_.writer().close();
   }

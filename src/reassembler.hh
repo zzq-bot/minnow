@@ -47,7 +47,5 @@ private:
   ByteStream output_;                                // the Reassembler writes to this ByteStream
   std::map<uint64_t, std::string> idx2substring_ {}; // map from stream index to substrings
   uint64_t unassembled_bytes_ { 0 };                 // bytes stored in reassembler
-  uint64_t unassembled_index_ { 0 };                 // first unassembled index
-  // bool closed_ {false}; // has received last substring already?
   uint64_t eof_idx_ { UINT64_MAX };
 };
