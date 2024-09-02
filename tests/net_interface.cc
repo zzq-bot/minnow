@@ -6,7 +6,6 @@
 #include <cstdlib>
 #include <iostream>
 #include <random>
-#include <cassert>
 
 using namespace std;
 
@@ -133,6 +132,7 @@ int main()
         serialize( make_arp( ARPMessage::OPCODE_REPLY, local_eth, "5.5.5.5", remote_eth, "10.0.1.1" ) ) ) } );
       test.execute( ExpectNoFrame {} );
     }
+
     {
       const EthernetAddress local_eth = random_private_ethernet_address();
       const EthernetAddress remote_eth = random_private_ethernet_address();
@@ -156,9 +156,11 @@ int main()
         ExpectFrame { make_frame( local_eth, remote_eth, EthernetHeader::TYPE_IPv4, serialize( datagram ) ) } );
       test.execute( ExpectNoFrame {} );
     }
+
     {
       const EthernetAddress local_eth = random_private_ethernet_address();
       NetworkInterfaceTestHarness test { "pending mappings last five seconds", local_eth, Address( "1.2.3.4", 0 ) };
+
       test.execute( SendDatagram { make_datagram( "5.6.7.8", "13.12.11.10" ), Address( "10.0.0.1", 0 ) } );
       test.execute( ExpectFrame {
         make_frame( local_eth,
@@ -169,9 +171,7 @@ int main()
       test.execute( Tick { 4990 } );
       test.execute( SendDatagram { make_datagram( "17.17.17.17", "18.18.18.18" ), Address( "10.0.0.1", 0 ) } );
       test.execute( ExpectNoFrame {} );
-      // assert (false);
       test.execute( Tick { 20 } );
-      // assert (false);
       // pending mapping should now expire
       test.execute( SendDatagram { make_datagram( "42.41.40.39", "13.12.11.10" ), Address( "10.0.0.1", 0 ) } );
       test.execute( ExpectFrame {
@@ -181,7 +181,7 @@ int main()
                     serialize( make_arp( ARPMessage::OPCODE_REQUEST, local_eth, "1.2.3.4", {}, "10.0.0.1" ) ) ) } );
       test.execute( ExpectNoFrame {} );
     }
-    // assert (false);
+
     {
       const EthernetAddress local_eth = random_private_ethernet_address();
       NetworkInterfaceTestHarness test { "active mappings last 30 seconds", local_eth, Address( "4.3.2.1", 0 ) };

@@ -85,9 +85,10 @@ private:
 
   // Mapping from IP address to Ethernet address
   using IPADDR_TYPE = uint32_t;
-  using ARP_VALUE = struct {
+  using ARP_VALUE = struct
+  {
     EthernetAddress eth_addr;
-    size_t timer; 
+    size_t timer;
   };
   // using BROADCAST_VALUE = struct {
   //   InternetDatagram dgram;
@@ -96,10 +97,8 @@ private:
   // address resolution protocol table
   std::unordered_map<IPADDR_TYPE, ARP_VALUE> arp_table_;
   // std::unordered_map<IPADDR_TYPE, BROADCAST_VALUE> broadcast_table_;
-
   std::unordered_map<uint32_t, std::pair<std::vector<InternetDatagram>, size_t>> broadcast_table_ {};
-  size_t MAX_ARP_HOLD_T = 30 * 1000; // 30 seconds
+  
+  size_t MAX_ARP_HOLD_T = 30 * 1000;      // 30 seconds
   size_t MAX_WAIT_BROADCAST_T = 5 * 1000; // 5 seconds
-
-
 };
