@@ -1,3 +1,4 @@
+#include "tcp_minnow_socket.hh"
 #include "socket.hh"
 
 #include <cstdlib>
@@ -9,7 +10,8 @@ using namespace std;
 
 void get_URL( const string& host, const string& path )
 {
-  TCPSocket sock;
+  // TCPSocket sock;
+  CS144TCPSocket sock;
   Address addr { host, "http" }; // hostname and service
   sock.connect( addr );
   // follow 2.1: Fetch a Web page
@@ -18,15 +20,22 @@ void get_URL( const string& host, const string& path )
   sock.write( "Connection: close \r\n\r\n" ); // double enter here
   // Read into buffer: void read( std::string& buffer );
 
-  string buf;
-  sock.read( buf );
-  while ( 1 ) {
-    if ( buf.empty() ) {
-      break;
-    }
-    cout << buf;
-    sock.read( buf );
+  string buffer;
+  // sock.read( buf );
+  // while ( 1 ) {
+  // 之前用 if ( buf.empty() ) { 会出问题
+  //   if ( sock.eof() ) {
+  //     break;
+  //   }
+  //   cout << buf;
+  //   sock.read( buf );
+  // }
+
+  while ( not sock.eof() ) {
+    sock.read( buffer );
+    cout << buffer;
   }
+  sock.wait_until_closed();
 
   // cerr << "Function called: get_URL(" << host << ", " << path << ")\n";
   // cerr << "Warning: get_URL() has not been implemented yet.\n";
