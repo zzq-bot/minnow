@@ -54,10 +54,10 @@ void NetworkInterface::send_datagram( const InternetDatagram& dgram, const Addre
     frame.header.src = this->ethernet_address_;
     frame.header.dst = ETHERNET_BROADCAST;
     frame.payload = serialize( arp_request );
+    broadcast_table_[next_hop_ip].first.emplace_back( dgram );
     transmit( frame );
 
     // broadcast_table_[next_hop_ip] = {dgram, 0}; // mark as broadcasted with timer 0
-    broadcast_table_[next_hop_ip].first.emplace_back( dgram );
   }
 }
 

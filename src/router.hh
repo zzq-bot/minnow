@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <optional>
+// #include <unordered_map>
 
 #include "exception.hh"
 #include "network_interface.hh"
@@ -35,4 +36,25 @@ public:
 private:
   // The router's collection of network interfaces
   std::vector<std::shared_ptr<NetworkInterface>> _interfaces {};
+
+  // route table
+  // using ROUTE_KEY = struct {
+  //   uint32_t route_prefix;
+  //   uint8_t prefix_length;
+
+  // };
+  // using ROUTE_VAL = struct {
+  //   optional<Address> next_hop;
+  //   size_t interface_num;
+  // };
+  // std::unordered_map<ROUTE_KEY, ROUTE_VAL> routing_table_;
+
+  using ROUTE_VAL = struct
+  {
+    uint32_t route_prefix;
+    uint8_t prefix_length;
+    std::optional<Address> next_hop;
+    size_t interface_num;
+  };
+  std::vector<ROUTE_VAL> routing_table_;
 };
